@@ -6,14 +6,18 @@ from powers_of_two_example import powers_of_two_gen
 from fibonacci_example import fibonacci_gen
 from utils import utils, fol_string_encoder
 
-#h_iList, v_iList = powers_of_two_gen.gen_powers_of_two_cycle_model(5)
-h_iList, v_iList = fibonacci_gen.gen_fibonacci_encoding_model(10)
+fibonacci = True
 
-print(f"Number of State Combinations present : {utils.get_state_count_adj_mappings(h_iList, v_iList)}")
+if fibonacci:
+    #h_iList, v_iList = powers_of_two_gen.gen_powers_of_two_cycle_model(5)
+    h_iList, v_iList = fibonacci_gen.gen_fibonacci_encoding_model(10)
 
-# add starting predicate condition
-cnf_format = [[(1,'a','a',True)]]
-cnf_format.extend(utils.implication_list_to_cnf_AEA(h_iList, v_iList, explicit_disjoint=False))
+    print(f"Number of State Combinations present : {utils.get_state_count_adj_mappings(h_iList, v_iList)}")
 
-formula_str = fol_string_encoder.to_fol_cnf_formula(cnf_format, add_exists_front=True, pretty=True)
-print(formula_str)
+    # add starting predicate condition
+    cnf_format = [[(1,'a','a',True)]]
+    cnf_format.extend(utils.implication_list_to_cnf_AEA(h_iList, v_iList, explicit_disjoint=False))
+
+    formula_str = fol_string_encoder.to_fol_cnf_formula(cnf_format, add_exists_front=True, pretty=True)
+    print(formula_str)
+

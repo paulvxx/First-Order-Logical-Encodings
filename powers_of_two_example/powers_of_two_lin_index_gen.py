@@ -125,3 +125,6 @@ def gen_powers_of_two_cycle_linear_block_model(full_iters : int):
         # update the current length and the linear index
         clen *= 2
         linear_index += 1
+
+    # Return the final list of implications
+    return (horizontal_implications, vertical_implications)
