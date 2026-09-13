@@ -121,4 +121,4 @@ def gen_powers_of_two_cycle_model(full_iters : int):
         #print(f" Vertical : {vertical_implications} ")
         #print("-----------------------------")
 
-    return (horizontal_implications, vertical_implications)
+    return (diagonal_sequences, horizontal_implications, vertical_implications)

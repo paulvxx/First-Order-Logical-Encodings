@@ -126,5 +126,5 @@ def gen_powers_of_two_cycle_linear_block_model(full_iters : int):
         clen *= 2
         linear_index += 1
 
-    # Return the final list of implications
-    return (horizontal_implications, vertical_implications)
+    # Return the diagonal sequences and the final list of implications
+    return (diagonal_sequences, horizontal_implications, vertical_implications)
