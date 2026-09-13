@@ -8,7 +8,7 @@ def add_implication_to_list(ilist : list, key, value):
     Inserts a target transition state into an adjacency implication map.
 
     Maintains a set-valued multimap representing non-deterministic (consequent) implications
-    $P_i \to \bigvee P_j$. Initializes a new singleton set if the antecedent 
+    Initializes a new singleton set if the antecedent 
     key is unseen, or appends to the existing consequent set.
 
     Args:
@@ -29,8 +29,8 @@ def read_implications_from_diagonals(horizontal_implications : dict, vertical_im
 
     Aligns two periodic sub-diagonals by computing their Least Common Multiple (LCM) 
     period and projects their local boundary relationships into 2D grid implications. 
-    Maps horizontal implications $P(z,x) \to P(z,y)$ from parallel positions and 
-    vertical implications $P(x,z) \to P(y,z)$ from forward-shifted offsets.
+    Maps horizontal implications $P(z,x) to P(z,y)$ from parallel positions and 
+    vertical implications $P(x,z) to P(y,z)$ from forward-shifted offsets.
 
     Args:
         horizontal_implications (dict[Any, set[Any]]): Multimap recording right-adjacent 
@@ -104,15 +104,15 @@ def implication_list_to_cnf_AEA(h_implication_list, v_implication_list, explicit
     Synthesizes horizontal and vertical implication mappings into CNF clauses under the AEA prefix.
 
     Transforms directional transition dictionaries into raw 4-tuple literal clauses 
-    applying De Morgan's laws ($A \to \bigvee B_i \equiv \neg A \lor \bigvee B_i$). 
-    Optionally appends pairwise exclusion clauses ($\neg P_i \lor \neg P_j$) to guarantee 
+    applying De Morgan's laws. 
+    Optionally appends pairwise exclusion clauses to guarantee 
     mutual exclusivity across distinct predicates.
 
     Args:
         h_implication_list (dict[Any, set[Any]]): Horizontal transition multimap 
-            $P(z,x) \to P(z,y)$.
+            $P(z,x) to P(z,y)$.
         v_implication_list (dict[Any, set[Any]]): Vertical transition multimap 
-            $P(x,z) \to P(y,z)$.
+            $P(x,z) to P(y,z)$.
         explicit_disjoint (bool, optional): If True, generates explicit pairwise 
             clauses asserting no two distinct predicates hold simultaneously. 
             Defaults to True.

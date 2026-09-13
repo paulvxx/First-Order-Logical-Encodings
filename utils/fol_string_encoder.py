@@ -47,9 +47,9 @@ def to_fol_cnf_formula(clauses, add_exists_front=False, wrap_single=False, prett
     """
     Encodes a clausal collection into an AEA-prefix First-Order Logic sentence[cite: 8].
 
-    Aggregates disjunctive clauses into Conjunctive Normal Form (CNF) under an 
-    unbounded $\forall x \exists y \forall z$ quantifier prefix. Supports optional Skolemized 
-    origin anchors ($\exists a$) and multi-line indented formatting.
+    Aggregates disjunctive clauses into Conjunctive Normal Form (CNF) under a 
+    prenex normal form ∀x∃y∀z quantifier prefix. Supports optional Skolemized 
+    origin anchors ($exists a$) and multi-line indented formatting.
 
     Args:
         clauses (list[list[tuple[Union[int, str], str, str, bool]]]): Collection 
