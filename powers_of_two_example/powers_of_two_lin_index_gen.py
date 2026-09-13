@@ -15,6 +15,10 @@ def gen_powers_of_two_cycle_model(full_iters : int):
     beginning) of the cycle by detecting certain adjacency pairs to determine
     the end of the current linear block, and expanding it by one (which is 
     detectable using specialized state markers)
+
+    In particular, the construction involves 
+    ensuring the length of the linear block (L state) inside a power of two cycle of 
+    period 2^n, n > 1, is n-1.
     """
     horizontal_implications = {1:{3}, 
                                2:{4}, 
