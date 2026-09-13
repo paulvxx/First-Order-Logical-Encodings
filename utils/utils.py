@@ -68,20 +68,24 @@ def read_implications_from_diagonals(horizontal_implications : dict, vertical_im
             add_implication_to_list(vertical_implications, n_expanded[i], c_expanded[i+1])
 
 
-def get_state_count_adj_mappings(h_implication_list, v_implication_list):
+def get_state_adj_mappings(h_implication_list, v_implication_list):
     """
-    Calculates the closed signature cardinality across horizontal and vertical implication maps.
+    Extracts the complete set of distinct states across all adjacency implications.
 
     Aggregates the union of all antecedent keys and consequent values across both 
-    directional dictionaries to determine the total number of distinct mutually 
-    disjoint predicates required by the first-order signature.
+    horizontal and vertical directional dictionaries. This identifies the 
+    comprehensive set of unique, mutually disjoint predicates required to define the 
+    closed first-order signature.
 
     Args:
-        h_implication_list (dict[Any, set[Any]]): Horizontal transition multimap.
-        v_implication_list (dict[Any, set[Any]]): Vertical transition multimap.
+        h_implication_list (dict[Any, set[Any]]): Horizontal transition multimap 
+            recording right-adjacent state implications.
+        v_implication_list (dict[Any, set[Any]]): Vertical transition multimap 
+            recording down-adjacent state implications.
 
     Returns:
-        int: Total count of unique active states across all implication boundaries.
+        set[Any]: The comprehensive collection of all unique active states present 
+        within the implication boundaries.
     """
     present_states = set()
     present_states = present_states.union(set(h_implication_list.keys()))
@@ -95,9 +99,8 @@ def get_state_count_adj_mappings(h_implication_list, v_implication_list):
     for v in v_implication_list.keys(): vertical_value_set = vertical_value_set.union(v_implication_list[v])
     present_states = present_states.union(vertical_value_set)
 
-    # total number of states / mutually-disjoint predicates
-    return len(present_states)
-
+    # total possible states / mutually-disjoint predicates
+    return present_states
 
 def implication_list_to_cnf_AEA(h_implication_list, v_implication_list, explicit_disjoint=True):
     """

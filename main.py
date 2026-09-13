@@ -61,7 +61,7 @@ def main():
         sys.exit(1)
 
     # 2. Extract and print state count metrics
-    state_count = utils.get_state_count_adj_mappings(h_impl, v_impl)
+    state_count = utils.get_state_adj_mappings(h_impl, v_impl)
     print(f"Number of State Combinations present: {state_count}")
 
     # 3. Initialize the existential anchor requirement
