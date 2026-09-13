@@ -68,7 +68,7 @@ def read_implications_from_diagonals(horizontal_implications : dict, vertical_im
             add_implication_to_list(vertical_implications, n_expanded[i], c_expanded[i+1])
 
 
-def get_state_adj_mappings(h_implication_list, v_implication_list):
+def get_state_signature(h_implication_list, v_implication_list):
     """
     Extracts the complete set of distinct states across all adjacency implications.
 
