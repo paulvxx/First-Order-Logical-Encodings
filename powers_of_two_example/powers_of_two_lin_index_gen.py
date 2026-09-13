@@ -6,7 +6,7 @@ aperiodic increasing powers of two cycles with linearly increasing
 blocks
 """
 
-def gen_powers_of_two_cycle_model(full_iters : int):
+def gen_powers_of_two_cycle_linear_block_model(full_iters : int):
     """
     This program iterates through dynamically expanding cycles
     of powers of two using simple mapping rules to phase out 
