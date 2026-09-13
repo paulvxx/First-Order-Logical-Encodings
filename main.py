@@ -48,13 +48,13 @@ def main():
     print(f"--- Generating FOL Encodings for: {args.model} ---")
     
     if args.model == "fibonacci":
-        iters = 200
+        iters = 8
         _, h_impl, v_impl = fibonacci_gen.gen_fibonacci_encoding_model(iters)
     elif args.model == "powers_of_two":
-        iters = 40
+        iters = 6
         _, h_impl, v_impl = powers_of_two_gen.gen_powers_of_two_cycle_model(iters)
     elif args.model == "linear_blocks":
-        iters = 40
+        iters = 6
         _, h_impl, v_impl = powers_of_two_lin_index_gen.gen_powers_of_two_cycle_linear_block_model(iters)
     else:
         print("Invalid model selected.")
