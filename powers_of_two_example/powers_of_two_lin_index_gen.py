@@ -98,13 +98,13 @@ def gen_powers_of_two_cycle_linear_block_model(full_iters : int):
             # The latter condition (current_sequence[i][-1]=="P")
             # allows the linear sequence to expand
             if current_sequence[i][0]=="L" or current_sequence[i][-1]=="P":
-                next_sequence_1[i] = "L"
+                next_sequence_1.append("L")
             else:
-                next_sequence_1[i] = "A"
-            next_sequence_2[i] = "C"
+                next_sequence_1.append("A")
+            next_sequence_2.append("C")
         # handle the last cycle elements separately (reduces in-loop branching)
-        next_sequence_1[clen-1] = "B"
-        next_sequence_2[clen-1] = "D"
+        next_sequence_1.append("B")
+        next_sequence_2.append("D")
 
         # Append the results of the two applied mappings together
         next_sequence = next_sequence_1 + next_sequence_2
