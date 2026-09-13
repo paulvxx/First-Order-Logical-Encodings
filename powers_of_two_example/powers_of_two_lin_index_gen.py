@@ -5,20 +5,34 @@ A cycle/sequence enumeration routine that enumerates
 aperiodic increasing powers of two cycles with linearly increasing
 blocks
 """
-
 def gen_powers_of_two_cycle_linear_block_model(full_iters : int):
     """
-    This program iterates through dynamically expanding cycles
-    of powers of two using simple mapping rules to phase out 
-    cycle period anchors, with the additional properties of 
-    also enforcing a linearly increasing block at the beggining (or relative
-    beginning) of the cycle by detecting certain adjacency pairs to determine
-    the end of the current linear block, and expanding it by one (which is 
-    detectable using specialized state markers)
+    Generates first-order constraints for power-of-two cycles containing linearly expanding sub-blocks.
 
-    In particular, the construction involves 
-    ensuring the length of the linear block (L state) inside a power of two cycle of 
-    period 2^n, n > 1, is n-1.
+    Extends the 1D diagonal-anchored power-of-two model by embedding a linear run 
+    of length n - 1 (state 'L') within each cycle period of length 2^n. The 
+    generator tracks bi-adjacency state pairs across two intermediate auxiliary 
+    sequences to forward-propagate transition markers and increment the linear run.
+
+    Phases per iteration:
+        1. Adjacency Pairing: Computes pairwise boundary states and appends a prime 
+           marker ('P') to the first non-linear state.
+        2. Marker Propagation: Replicates the auxiliary cycle and shifts 'P' to 
+           the terminal linear state to bridge successive horizons.
+        3. Doubled Re-encoding: Applies homomorphic homomorphisms that expand the 
+           linear block by 1 while doubling the total periodic length.
+
+    Args:
+        full_iters (int): Number of expansion and doubling cycles to execute.
+
+    Returns:
+        tuple: A 3-element tuple containing:
+            - diagonal_sequences (list[list[Any]]): History of state sequences 
+              along successive sub-diagonals (Y = X + a).
+            - horizontal_implications (dict[Any, set[Any]]): Mapping of state 
+              P(z, x) to allowed right-adjacent states P(z, y).
+            - vertical_implications (dict[Any, set[Any]]): Mapping of state 
+              P(x, z) to allowed down-adjacent states P(y, z).
     """
     horizontal_implications = {1:{3}, 
                                2:{4}, 

@@ -4,10 +4,26 @@ Utilities for encoding functions from structural format to string-formulas
 
 def format_literal(literal_tuple, capitalize_first_only=False):
     """
-    Converts a single 4-tuple format (predicate_id, arg1, arg2, sign) into a string literal.
+    Formats a structured literal tuple into a First-Order Logic atomic string.
 
-    If predicate_id is an integer or a numeric string, it is converted to 'P_X'.
-    If sign is False, a negation symbol (~) is prepended.
+    Serializes an internal predicate representation into standard mathematical 
+    predicate syntax (e.g., `P_3(z,x)` or `~P_5(z,y)`). Integer symbols are automatically 
+    prefixed with 'P_', string symbols are normalized by case, and negative 
+    polarity prepends a negation operator.
+
+    Args:
+        literal_tuple (tuple[Union[int, str], str, str, bool]): A 4-tuple 
+            `(predicate_id, arg1, arg2, sign)` denoting the predicate symbol, 
+            its two relational coordinates, and its boolean truth sign.
+        capitalize_first_only (bool, optional): If True, capitalizes only the 
+            first character of string predicates; otherwise uppercases all. 
+            Defaults to False.
+
+    Returns:
+        str: Serialized literal string with arguments and optional negation[cite: 8].
+
+    Raises:
+        TypeError: If `predicate_id` is neither an integer nor a string[cite: 8].
     """
     pred, arg1, arg2, sign = literal_tuple
     
@@ -29,23 +45,24 @@ def format_literal(literal_tuple, capitalize_first_only=False):
 
 def to_fol_cnf_formula(clauses, add_exists_front=False, wrap_single=False, pretty=False):
     """
-    Converts a list of list of 4-tuples into a First-Order Logic formula in the AEA prefix class.
-    
-    Parameters:
-    -----------
-    clauses : list of list of tuple
-        The input clauses, where each clause is a list of 4-tuples.
-    add_exists_front : bool, default False
-        Whether or not a leading existential symbol (∃a) should be added to assert a starting condition 
-    wrap_single : bool, default False
-        Whether to wrap single-literal clauses in parentheses, e.g., (P_5(z,x)) instead of P_5(z,x).
-    pretty : bool, default False
-        Whether to pretty-print the formula with indentation and newlines.
-    
+    Encodes a clausal collection into an AEA-prefix First-Order Logic sentence[cite: 8].
+
+    Aggregates disjunctive clauses into Conjunctive Normal Form (CNF) under an 
+    unbounded $\forall x \exists y \forall z$ quantifier prefix. Supports optional Skolemized 
+    origin anchors ($\exists a$) and multi-line indented formatting.
+
+    Args:
+        clauses (list[list[tuple[Union[int, str], str, str, bool]]]): Collection 
+            of clauses, where each clause is a disjunction of 4-tuple literals.
+        add_exists_front (bool, optional): Prepend leading existential quantifier 
+            `∃a` to anchor initial state conditions. Defaults to False.
+        wrap_single (bool, optional): Force enclosing parentheses around unit 
+            clauses containing a single literal. Defaults to False.
+        pretty (bool, optional): Format with standard multi-line indentation 
+            and logical line breaks. Defaults to False.
+
     Returns:
-    --------
-    str
-        The formatted FOL string.
+        str: Fully qualified First-Order Logic sentence in CNF syntax.
     """
     if not clauses:
         return "∀x∃y∀z { True }"

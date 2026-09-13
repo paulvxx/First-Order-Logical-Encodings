@@ -6,37 +6,31 @@ aperiodic increasing powers of two cycles
 """
 def gen_powers_of_two_cycle_model(full_iters : int):
     """
-    A cycle/sequence enumeration routine that generates dynamically expanding, 
-    aperiodic cycles to encode powers of two for origin-less computation on a 
-    2-D grid.
-    
-    When the total number of required states (or tiles) to represent this 
-    exponential growth is initially unknown in general, this routine serves as a discovery tool. 
-    By running the deterministic expansion for a sufficient number of iterations, 
-    it exhausts all early-developing dynamic cases and tracks emergent global 
-    behavior. This seamlessly determines the necessary state count and 
-    constructs the final first-order logical formula (adjacency implications) 
-    required for the model.
-    
-    Algorithm Phases:
-        - Phase 1: Applies a bijective structural mapping to the current dynamic 
-          cycle, transitioning the base states into a set of auxiliary/transitional 
-          states
-        - Phase 2: Applies branching non-deterministic mappings to the auxiliary 
-          states and concatenates the results. This explicitly doubles 
-          the sequence length per iteration, capturing the powers-of-two exponential 
-          growth
+    Generates first-order logic adjacency constraints for dynamically expanding power-of-two cycles.
+
+    Constructs an originless computational model over a 2D grid anchored to 
+    the main diagonal (Y = X). The routine iteratively expands periodic diagonal 
+    slices using homomorphic state substitutions and irreversible phase-out 
+    transitions to discover the minimal closed signature and derive all required 
+    horizontal and vertical first-order implication clauses.
+
+    Phases per iteration:
+        1. Expansion: Applies a deterministic mapping to elevate current base 
+           cycle states to auxiliary transitional states.
+        2. Doubling: Applies branching non-deterministic substitutions to double 
+           the cycle period ($2^n \to 2^{n+1}$) and records new boundary implications.
 
     Args:
-        full_iters (int): The number of iterations to perform of the dynamic 
-                          cycle expansion.
+        full_iters (int): Number of doubling iterations to simulate.
 
     Returns:
-        tuple: A tuple containing two dictionaries representing the final formula:
-            - horizontal_implications (dict): Maps a given state to a set of 
-              valid horizontally adjacent states
-            - vertical_implications (dict): Maps a given state to a set of 
-              valid vertically adjacent states
+        tuple: A 3-element tuple containing:
+            - diagonal_sequences (list[list[Any]]): History of state sequences 
+              along successive sub-diagonals (Y = X + a).
+            - horizontal_implications (dict[Any, set[Any]]): Mapping of state 
+              P(z, x) to allowed right-adjacent states P(z, y).
+            - vertical_implications (dict[Any, set[Any]]): Mapping of state 
+              P(x, z) to allowed down-adjacent states P(y, z).
     """
     horizontal_implications = {1:{3}, 
                                2:{4}, 

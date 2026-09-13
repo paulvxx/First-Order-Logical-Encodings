@@ -5,7 +5,17 @@ Shorthand utility to add implication to list
 """
 def add_implication_to_list(ilist : list, key, value):
     """
-    Shorthand for adding new element to value set for key-value dictionary pair
+    Inserts a target transition state into an adjacency implication map.
+
+    Maintains a set-valued multimap representing non-deterministic (consequent) implications
+    $P_i \to \bigvee P_j$. Initializes a new singleton set if the antecedent 
+    key is unseen, or appends to the existing consequent set.
+
+    Args:
+        ilist (dict[Any, set[Any]]): Dictionary tracking antecedents to sets of 
+            reachable consequent states.
+        key (Any): Antecedent state identifier.
+        value (Any): Consequent transition state to register.
     """
     if key not in ilist:
         ilist[key] = {value}
@@ -15,7 +25,23 @@ def add_implication_to_list(ilist : list, key, value):
 def read_implications_from_diagonals(horizontal_implications : dict, vertical_implications : dict, 
             current_line : list, next_line : list):
     """
-    Helper routine to extract implications from two lists representing cycles along diagonal lines
+    Extracts first-order grid adjacency constraints between consecutive diagonal slices.
+
+    Aligns two periodic sub-diagonals by computing their Least Common Multiple (LCM) 
+    period and projects their local boundary relationships into 2D grid implications. 
+    Maps horizontal implications $P(z,x) \to P(z,y)$ from parallel positions and 
+    vertical implications $P(x,z) \to P(y,z)$ from forward-shifted offsets.
+
+    Args:
+        horizontal_implications (dict[Any, set[Any]]): Multimap recording right-adjacent 
+            transitions between matching indices.
+        vertical_implications (dict[Any, set[Any]]): Multimap recording down-adjacent 
+            transitions between index-offset pairs.
+        current_line (list[Any]): Periodic state sequence along diagonal $Y = X + a$.
+        next_line (list[Any]): Periodic state sequence along successor diagonal $Y = X + a + 1$.
+
+    Raises:
+        ValueError: If either diagonal sequence is empty.
     """
     c_len = len(current_line)
     n_len = len(next_line)
@@ -44,8 +70,18 @@ def read_implications_from_diagonals(horizontal_implications : dict, vertical_im
 
 def get_state_count_adj_mappings(h_implication_list, v_implication_list):
     """
-    Shorthand utility for obtaining a total count of the number of states or predicates present
-    in an implication mapping format (as dictionaries) in adjacency-mapping form
+    Calculates the closed signature cardinality across horizontal and vertical implication maps.
+
+    Aggregates the union of all antecedent keys and consequent values across both 
+    directional dictionaries to determine the total number of distinct mutually 
+    disjoint predicates required by the first-order signature.
+
+    Args:
+        h_implication_list (dict[Any, set[Any]]): Horizontal transition multimap.
+        v_implication_list (dict[Any, set[Any]]): Vertical transition multimap.
+
+    Returns:
+        int: Total count of unique active states across all implication boundaries.
     """
     present_states = set()
     present_states = present_states.union(set(h_implication_list.keys()))
@@ -65,11 +101,25 @@ def get_state_count_adj_mappings(h_implication_list, v_implication_list):
 
 def implication_list_to_cnf_AEA(h_implication_list, v_implication_list, explicit_disjoint=True):
     """
-    Converts a list of adjacency implications (key-value dictionary) to 
-    a representation format of conjunctions of disjunctions
-    (conjunctive normal form) ∀x∃y∀z P(x,y,z) where P is quantifier-free
-    One might wish to rely on an implied assumption that two predicates never overlap 
-    (set explicit_disjoint = False if this is the case)
+    Synthesizes horizontal and vertical implication mappings into CNF clauses under the AEA prefix.
+
+    Transforms directional transition dictionaries into raw 4-tuple literal clauses 
+    applying De Morgan's laws ($A \to \bigvee B_i \equiv \neg A \lor \bigvee B_i$). 
+    Optionally appends pairwise exclusion clauses ($\neg P_i \lor \neg P_j$) to guarantee 
+    mutual exclusivity across distinct predicates.
+
+    Args:
+        h_implication_list (dict[Any, set[Any]]): Horizontal transition multimap 
+            $P(z,x) \to P(z,y)$.
+        v_implication_list (dict[Any, set[Any]]): Vertical transition multimap 
+            $P(x,z) \to P(y,z)$.
+        explicit_disjoint (bool, optional): If True, generates explicit pairwise 
+            clauses asserting no two distinct predicates hold simultaneously. 
+            Defaults to True.
+
+    Returns:
+        list[list[tuple[Any, str, str, bool]]]: A list of disjunctive clauses, where 
+        each literal is represented as `(predicate, arg1, arg2, sign)`.
     """
     clauses = []
 

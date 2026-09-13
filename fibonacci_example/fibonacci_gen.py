@@ -6,7 +6,36 @@ aperiodic fibonacci length blocks inside power of two cycle expansions
 """
 def gen_fibonacci_encoding_model(full_iters : int):
     """
-    Fibonacci encoding using Wang Tiles and AEA formula format
+    Generates first-order logic constraints encoding Fibonacci-length runs in power-of-two cycles.
+
+    Builds an originless model anchored along the main diagonal (Y = X) to simulate 
+    additive sequences. Because Fibonacci growth is non-multiplicative, the routine 
+    embeds consecutive terms into a power-of-two cyclic scaffold by coordinating 
+    state variables via iterative rotational alignment, additive fusion, and 
+    homomorphic doubling.
+
+    Phases per iteration:
+        1. Bi-primitive Pairing: Concatenates primitive states into 2-character 
+           rotational seeds.
+        2. Rotational Alignment: Iteratively shifts the sequence leftward until 
+           boundary markers ('AF'/'BF') align the active Fibonacci blocks.
+        3. Additive Fusion: Collapses aligned pairs into auxiliary sum states 
+           (G, H, I, J) capturing the sequence recurrence.
+        4. Capacity Doubling: Expands auxiliary states into doubled primitive cycles, 
+           preventing register overflow for subsequent terms.
+
+    Args:
+        full_iters (int): Number of complete Fibonacci summation and doubling 
+            rounds to simulate.
+
+    Returns:
+        tuple: A 3-element tuple containing:
+            - diagonal_sequences (list[list[Any]]): History of state sequences 
+              along successive sub-diagonals (Y = X + a).
+            - horizontal_implications (dict[Any, set[Any]]): Mapping of state 
+              P(z, x) to allowed right-adjacent states P(z, y).
+            - vertical_implications (dict[Any, set[Any]]): Mapping of state 
+              P(x, z) to allowed down-adjacent states P(y, z).
     """
     horizontal_implications = {1:{5}, 
                                2:{6}, 
@@ -180,4 +209,4 @@ def gen_fibonacci_encoding_model(full_iters : int):
         #print(f" Vertical : {vertical_implications} ")
         #print("-----------------------------")
 
-    return (horizontal_implications, vertical_implications)
+    return (diagonal_sequences, horizontal_implications, vertical_implications)
